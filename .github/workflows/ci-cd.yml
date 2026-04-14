@@ -8,7 +8,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  # Docker requires lowercase image names
+  IMAGE_NAME: adityabhatia101644/react-docker-lab
 
 jobs:
   test-and-build:
@@ -50,7 +51,9 @@ jobs:
 
       - name: Slack Notification
         if: success()
+        # This step will show as 'Skipped' or 'Failed' if you haven't added 
+        # the SLACK_WEBHOOK secret in GitHub Settings, but the build above will be Green.
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: 'Build Successful! Image pushed to GHCR with commit SHA.'
+          SLACK_MESSAGE: 'Deployment Successful! Image pushed to GHCR.'
